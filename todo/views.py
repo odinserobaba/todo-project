@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.csrf import csrf_protect
 # Create your views here.
 
@@ -12,9 +12,9 @@ def home(request):
 
 
 @csrf_protect
-def singupuser(request):
+def signupuser(request):
     if request.method == 'GET':
-        return render(request, 'todo/singupuser.html', {'form': UserCreationForm()})
+        return render(request, 'todo/signupuser.html', {'form': UserCreationForm()})
     else:
         # Create new user
         if request.POST['password1'] == request.POST['password2']:
@@ -25,16 +25,29 @@ def singupuser(request):
                 login(request, user)
                 return redirect('currenttodos')
             except IntegrityError:
-                return render(request, 'todo/singupuser.html', {'form': UserCreationForm(), 'error': 'This username has already been taken'})
+                return render(request, 'todo/signupuser.html', {'form': UserCreationForm(), 'error': 'This username has already been taken'})
         else:
             # Error pas1==pas2
-            return render(request, 'todo/singupuser.html', {'form': UserCreationForm(), 'error': 'Password did not math'})
+            return render(request, 'todo/signupuser.html', {'form': UserCreationForm(), 'error': 'Password did not math'})
 
 # if create new user
 
 
 def currenttodos(request):
     return render(request, 'todo/currenttodos.html')
+
+
+def loginuser(request):
+    if request.method == 'GET':
+        return render(request, 'todo/loginuser.html', {'form': AuthenticationForm()})
+    else:
+        user = authenticate(
+            request, username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            return render(request, 'todo/loginuser.html', {'form': AuthenticationForm(), 'error': 'Username and password did not math'})
+        else:
+            login(request, user)
+            return redirect('currenttodos')
 
 
 def logoutuser(request):

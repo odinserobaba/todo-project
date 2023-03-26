@@ -11,8 +11,8 @@ Logget In as {{ user.username }}
 
 {% else %}
 
-<a href="#">Sing Up</a>
-<a href="#">Login</a>
+<a href="{% url 'signupuser' %}">Sing Up</a>
+<a href="{% url 'loginuser' %}">Login</a>
 
 {% endif %}
 <br>
