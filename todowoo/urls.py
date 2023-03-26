@@ -19,9 +19,11 @@ from todo import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #AUTH
-    path('singup/', views.singupuser,name='singupuser'),
-    
-    #TODOS
-    path('current/', views.currenttodos,name='currenttodos'),
+    # AUTH
+    path('singup/', views.singupuser, name='singupuser'),
+    path('logout/', views.logoutuser, name='logoutuser'),
+
+    # TODOS
+    path('current/', views.currenttodos, name='currenttodos'),
+    path('', views.home, name='home'),
 ]

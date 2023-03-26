@@ -2,7 +2,12 @@
 
 Logget In as {{ user.username }}
 
-<a href="#">Logout</a>
+
+
+<form action="{% url 'logoutuser' %}" method="POST">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit">Logout </button>
+</form>
 
 {% else %}
 
